@@ -2,21 +2,41 @@
 #FONTS
 \*------------------------------------*/
 
+@font-face{
+    font-family: "Work Sans";
+    src: url("../fonts/WorkSans-VariableFont_wght.ttf") format(".ttf");
+
+}
+
 /*------------------------------------*\
 #Variables
 \*------------------------------------*/
 
 :root {
     /* colors */
-
+    --color-light: #CCE7FF;
+    --color-dark: #0F3557;
+    
+    --color-front: var(--color-light);
+    --color-back: var(--color-dark);
     /* opacity */
+    --global-muted-opacity: 0.6;
 
     /* transitions */
+
+
+    /* sizes */
+    --size-logo: 22px;
 }
 
 /*------------------------------------*\
 #GENERIC
 \*------------------------------------*/
+
+.is-night{
+    --color-front: var(--color-dark);
+    --color-back: var(--color-light)
+}
 
 /*
     Generic: Page
@@ -31,6 +51,11 @@ html {
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-family: "Work Sans";
+    background-color: var(--color-front);
+    color: var(--color-back);
+    font-feature-settings: "zero";
+    
 }
 
 *,
@@ -46,15 +71,11 @@ html {
 * Customize the background color to match your design.
 */
 
-::-moz-selection {
-    background: red;
-    color: white;
-    text-shadow: none;
-}
+
 
 ::selection {
-    background: red;
-    color: white;
+    background: var(--color-back);
+    color: var(--color-front);
     text-shadow: none;
 }
 
@@ -242,6 +263,29 @@ input::placeholder {
 #COMPONENTS
 \*------------------------------------*/
 
+.c-app{
+    max-width: 29em;
+    margin: 0 auto;
+    padding: 2em;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: flex-end; */
+
+
+
+    /* display: flex;
+    flex-direction: column;
+    justify-content: space-between; */
+}
+
+
+
+.c-horizon{
+    margin-top: auto;
+    
+}
+
 /*
     Component: Logo
     ---
@@ -249,8 +293,13 @@ input::placeholder {
 */
 
 .c-logo {
-
+    font-size: 16px;
+    line-height: 16px;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
 }
+
 
 /*
     Component: Sun
@@ -259,11 +308,12 @@ input::placeholder {
 */
 
 .c-sun {
-
+    height: var(--size-logo);
+    fill: var(--color-back);
 }
 
 .c-logo .c-sun {
-
+    margin-right: 8px;
 }
 
 /*
@@ -272,11 +322,69 @@ input::placeholder {
     Main app wrapper
 */
 
+.c-app__summary{
+
+    font-size: 28px ;
+    line-height: 40px;
+
+}
+
 /*
     Component: Horizon
     ---
     Horizon with sun visualisation
 */
+
+
+
+.c-horizon__time{
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.c-horizon__line{
+    border-top: 1px solid var(--color-back);
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 32px;
+    padding-top: 4px;
+}
+
+
+
+.c-horizon__sky-wrapper{
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    padding-top: 22px;
+    padding-right: 40px;
+
+}
+
+.c-horizon__sky{
+    position: relative;
+    height: 100%;
+}
+
+.c-horizon__sun {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    transform: translateY(20px);
+}
+
+.c-horizon__sun::before{
+    content: attr(data-time);
+    font-size: 12px;
+    line-height: 16px;
+    display: block;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
 
 /*------------------------------------*\
 #UTILITIES
@@ -286,6 +394,10 @@ input::placeholder {
     Utilities: Mute
     Mute with opacity
 */
+
+.u-muted{
+    opacity: var(--global-muted-opacity);
+}
 
 /*------------------------------------*\
 #STATES
