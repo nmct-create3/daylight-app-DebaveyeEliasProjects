@@ -5,8 +5,10 @@
 @font-face{
     font-family: "Work Sans";
     src: url("../fonts/WorkSans-VariableFont_wght.ttf") format(".ttf");
-
+    font-weight: normal;
 }
+
+
 
 /*------------------------------------*\
 #Variables

@@ -1,47 +1,61 @@
-
 const showResult = function(json) {
-	console.log(json);
-	let sunrise = json.city.sunrise + json.city.timezone;
-	let sunset = json.city.sunset + json.city.timezone;
-	let date = new Date();
-	let time1 = date.getTime()/1000;
+	//millisecondjes krijgen EN timezone toepassen
+	let sunriseMillis = json.city.sunrise * 1000;
+	let sunsetMillis = json.city.sunset * 1000;
+	let currentDateMillis = new Date().getTime();
 
-	let time =(time1 *1000)+ json.city.timezone;
-	let percentage = 100 -((sunset - sunrise)/time)*100;
-	console.error(percentage)
-	let perc = ((sunset - sunrise)/time)*100
-	console.error(perc)
-	console.log(sunrise);
-	console.log(sunset);
-	console.log(time);
-	document.querySelector(`.js-sun`).style.bottom = `${perc}%`;
-	document.querySelector(`.js-sun`).style.left =  `${percentage}%`;
-	let time2 = convertTImne(((date.getTime())/1000)+ json.city.timezone);
-	document.querySelector(`.js-sun`).setAttribute("data-time",time2);
-	document.querySelector(".js-sunrise").innerHTML = convertTImne(sunrise);
-	document.querySelector(".js-sunset").innerHTML = convertTImne(sunset);
-	let dateSunset = toDate(sunset);
-	let dateSunrise = toDate(sunrise);
-	if(date.getTime() > dateSunset.getTime() && date.getTime() > dateSunrise.getTime()){
-		document.querySelector(".is-day").classList.add("is-night");
+	//Dates waarmee we gaan werken
+	let sunriseDate = new Date(sunriseMillis);
+	let sunsetDate = new Date(sunsetMillis);
+	let currentTime = new Date(currentDateMillis);
+	
+
+	//Minutekes calculeren
+	let sunsetMinutes = toMinutes(sunsetDate) + json.city.timezone;
+	let sunriseMinutes = toMinutes(sunriseDate)+ json.city.timezone;
+	let currentMinutes = toMinutes(currentTime)+ json.city.timezone;
+
+	//Calculating percentage
+	let percentage2 = Math.round(((currentMinutes - sunriseMinutes)/(sunsetMinutes - sunriseMinutes))*100);
+	let timeOfDayLeft = sunsetMinutes - currentMinutes;
+	let sunriseString = `${sunriseDate.getHours()}:${doMinutesThingy(sunriseDate.getMinutes())}`;
+	let sunsetString = `${sunsetDate.getHours()}:${doMinutesThingy(sunsetDate.getMinutes())}`;
+	let currentString = `${currentTime.getHours()}:${doMinutesThingy(currentTime.getMinutes())}`;
+
+	//showing time
+	document.querySelector(`.js-sunrise`).innerHTML = sunriseString;
+	document.querySelector(`.js-sunset`).innerHTML = sunsetString;
+	document.querySelector(`.js-sun`).setAttribute(`data-time`, currentString);
+	document.querySelector(`.js-time-left`).innerHTML = timeOfDayLeft + " ";
+	document.querySelector(`.js-sun`).style.bottom = `${percentage2}%`;
+	document.querySelector(`.js-sun`).style.left = `${percentage2}%`;
+	document.querySelector(`.js-location`).innerHTML = `${json.city.name}, ${json.city.country}`
+
+	
+
+
+
+
+
+
+
+};
+
+const toMinutes = function(date) {
+	let mins = 0
+	for ( let i = 0; i < date.getHours(); i++){
+		mins += 60;
 	}
-	else{
-		document.querySelector(".is-day").classList.remove("is-night");
-	}
+	mins += date.getMinutes();
+	return mins;
+
 };
 
 const toDate = function(millis){
 	return new Date(millis * 1000);
 }
 
-const convertTImne = function(millis){
-	let d = new Date(millis*1000);
-	hours = format_two_digits(d.getUTCHours());
-    minutes = format_two_digits(d.getUTCMinutes());
-    seconds = format_two_digits(d.getSeconds());
-    return hours + ":" + minutes;
-}
-const format_two_digits = function(n) {
+const doMinutesThingy = function(n) {
     return n < 10 ? '0' + n : n;
 }
 
@@ -60,5 +74,5 @@ let getAPI = (lat, lon) => {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-	getAPI(40.730610,-73.935242);
+	getAPI(50.819478,3.257726);
 });
